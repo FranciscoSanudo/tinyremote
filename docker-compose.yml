@@ -1,0 +1,17 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  i3wm:
+    build: .
+    container_name: i3wm_minimal
+    environment:
+      - DISPLAY=:1
+      - VNC_PORT=5901
+      - SCREEN_RESOLUTION=1920x1080
+    ports:
+      - "127.0.0.1:5901:5901"
+    volumes:
+      - ./config:/root/.config
+      - ../:/app
+    restart: unless-stopped
