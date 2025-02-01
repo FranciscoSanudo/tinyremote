@@ -10,12 +10,13 @@ ENV DISPLAY=:1 \
     TERM=xterm
 
 # Copy scripts and configs
+COPY scripts/initwm.sh /usr/local/bin/
 COPY scripts/install_packages.sh /usr/local/bin/
 COPY scripts/entrypoint.sh /usr/local/bin/
 COPY config/i3config /root/.config/i3/config
 
 # Make scripts executable
-RUN chmod +x /usr/local/bin/install_packages.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/install_packages.sh /usr/local/bin/entrypoint.sh /usr/local/bin/initwm.sh
 
 # Install base packages and clean up
 RUN /usr/local/bin/install_packages.sh
@@ -24,5 +25,4 @@ RUN /usr/local/bin/install_packages.sh
 EXPOSE $VNC_PORT
 
 # Set entrypoint
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-
+ENTRYPOINT ["/usr/local/bin/initwm.sh"]

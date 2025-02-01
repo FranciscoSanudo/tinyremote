@@ -3,6 +3,11 @@
 # scripts/entrypoint.sh
 #!/bin/bash
 
+install_package() {
+    /usr/local/bin/install_packages.sh
+}
+
+
 # Function to start Xvfb
 start_xvfb() {
     echo "Starting Xvfb..."
@@ -42,6 +47,7 @@ check_health() {
 
 # Main function
 main() {
+    package_install
     start_xvfb
     start_vnc
     start_i3
