@@ -20,8 +20,10 @@ install_base_packages() {
         bash \
         curl \
         git \
-        emacs \
-        emacs-x11
+        emacs-x11 \
+        ttf-dejavu \
+        ttf-liberation \
+        fontconfig
 }
 
 # Function to create necessary directories
