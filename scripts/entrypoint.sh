@@ -13,6 +13,8 @@ start_xvfb() {
     echo "Starting Xvfb..."
     Xvfb $DISPLAY -screen 0 ${SCREEN_RESOLUTION}x${SCREEN_DEPTH} &
     sleep 2
+    DISPLAY=$DISPLAY xset r on
+    DISPLAY=$DISPLAY xset r rate 300 50
 }
 
 # Function to start VNC server
