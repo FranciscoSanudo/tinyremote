@@ -11,5 +11,6 @@ services:
       - "127.0.0.1:5901:5901"
     volumes:
       - ./config:/root/.config
-      - ../:/app
+      # - ../:/app
+      - /Users/franciscosanudo/projects:/app
     restart: unless-stopped
