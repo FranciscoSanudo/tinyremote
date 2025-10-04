@@ -27,6 +27,17 @@ A minimal project to run a lightweight remote desktop environment (i3 + VNC) ins
    - INTERVAL: monitoring interval in seconds
    - ENDPOINTS_FILE, LOG_FILE: paths used by the monitor
 
+* Podman support
+If you prefer Podman, there are two options:
+
+- Use `podman-compose` (if installed) directly. The existing `docker-compose.yml` should be compatible with `podman-compose` in most cases.
+- Or use the provided wrapper script that picks `podman-compose` automatically when available:
+  #+begin_src sh
+  ./scripts/compose-up.sh up
+  #+end_src
+
+You can force Podman by setting the environment variable `PODMAN=1`.
+
 * Repository structure
 - Dockerfile :: base image and script installation
 - docker-compose.yml :: service definition for i3wm
