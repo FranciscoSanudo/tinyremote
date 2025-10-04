@@ -1,16 +1,18 @@
 # docker-compose.yml
+# Uses environment variables from .env (if present). See .env.example
 services:
   i3wm:
     build: .
     container_name: i3wm_minimal
     environment:
-      - DISPLAY=:1
-      - VNC_PORT=5901
-      - SCREEN_RESOLUTION=1920x1080
+      - DISPLAY=${DISPLAY:-:1}
+      - VNC_PORT=${VNC_PORT:-5901}
+      - SCREEN_RESOLUTION=${SCREEN_RESOLUTION:-1920x1080}
+      - SCREEN_DEPTH=${SCREEN_DEPTH:-24}
     ports:
-      - "127.0.0.1:5901:5901"
+      - "127.0.0.1:${VNC_PORT:-5901}:${VNC_PORT:-5901}"
     volumes:
       - ./config:/root/.config
-      # - ../:/app
-      - /Users/franciscosanudo/projects:/app
+      # Mount a projects directory: override PROJECTS_DIR in .env or use default ./projects
+      - ${PROJECTS_DIR:-./projects}:/app
     restart: unless-stopped

@@ -1,6 +1,5 @@
 #+TITLE: tinyremote
-#+AUTHOR: Francisco
-#+LANGUAGE: en
+#+AUTHOR: Francisco J. Sanudo
 
 * Description
 A minimal project to run a lightweight remote desktop environment (i3 + VNC) inside a Docker container. Designed as a tiny, reproducible reference for personal use or as a starter template.
@@ -34,6 +33,9 @@ A minimal project to run a lightweight remote desktop environment (i3 + VNC) ins
 - scripts/ :: startup and installation scripts
 - config/ :: i3, emacs, fish and other configs
 
+* Security
+Be careful with VNC exposure. By default the container binds VNC to localhost and will run without a password unless you set `VNC_PASSWORD` in your `.env` or environment. If you intend to expose the VNC port beyond localhost, set a strong `VNC_PASSWORD` or tunnel VNC over SSH. Also consider running the container with a non-root user for improved security.
+
 * Recommended next steps
 - Add CI for build and smoke tests (there is a basic workflow in .github/workflows)
 - Add a .env.example documenting configuration variables
@@ -46,4 +48,4 @@ Please read CONTRIBUTING.md for branch workflow and PR guidelines.
 MIT (see LICENSE)
 
 * Contact
-Maintained by the author. Open issues or PRs on GitHub for suggestions.
+Maintained by Francisco Sanudo. Open issues or PRs on GitHub for suggestions.
