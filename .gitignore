@@ -1,0 +1,34 @@
+.DS_Store
+*.log
+*.local
+*.swp
+*.elc
+node_modules/
+.env
+.env.local
+/.vscode/
+/target/
+/.cache/
+/.idea/
+**/dist/
+**/build/
+*.tar
+*.tar.gz
+*.tgz
+
+# Docker
+**/monitor.log
+*.pid
+**/tmp/
+**/*.pem
+secrets/
+
+# Emacs
+*~
+.#*
+*/.local/
+/.emacs.d/.local/
+/.emacs.d/.cache/
+
+# OS
+Thumbs.db

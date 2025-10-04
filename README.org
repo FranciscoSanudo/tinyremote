@@ -1,0 +1,49 @@
+#+TITLE: tinyremote
+#+AUTHOR: Francisco
+#+LANGUAGE: en
+
+* Description
+A minimal project to run a lightweight remote desktop environment (i3 + VNC) inside a Docker container. Designed as a tiny, reproducible reference for personal use or as a starter template.
+
+* Goals
+- Provide a minimal, easy-to-use configuration.
+- Keep everything reproducible using Docker / Docker Compose.
+- Play well with Emacs (org-mode and Doom Emacs configuration included).
+
+* Requirements
+- Docker and docker-compose (or Podman + podman-compose)
+- GNU Make (optional)
+- Emacs/Doom Emacs if you plan to use the included editor configuration
+
+* Getting started
+1. Build and start the project with Docker Compose:
+   #+begin_src sh
+   docker-compose up -d --build
+   #+end_src
+
+2. Connect via VNC at: localhost:5901 (default)
+
+3. Useful environment variables (export before running if needed):
+   - BASE_URL: base URL for services (if applicable)
+   - INTERVAL: monitoring interval in seconds
+   - ENDPOINTS_FILE, LOG_FILE: paths used by the monitor
+
+* Repository structure
+- Dockerfile :: base image and script installation
+- docker-compose.yml :: service definition for i3wm
+- scripts/ :: startup and installation scripts
+- config/ :: i3, emacs, fish and other configs
+
+* Recommended next steps
+- Add CI for build and smoke tests (there is a basic workflow in .github/workflows)
+- Add a .env.example documenting configuration variables
+- Review VNC security before exposing the service in production
+
+* How to contribute
+Please read CONTRIBUTING.md for branch workflow and PR guidelines.
+
+* License
+MIT (see LICENSE)
+
+* Contact
+Maintained by the author. Open issues or PRs on GitHub for suggestions.
