@@ -1,49 +1,49 @@
 #+TITLE: tinyremote
 #+AUTHOR: Francisco
-#+LANGUAGE: es
+#+LANGUAGE: en
 
-* Descripción
-Proyecto minimal para levantar un entorno de escritorio remoto (i3 + VNC) dentro de un contenedor Docker. Pensado como una "tiny" referencia reproducible para uso personal o como plantilla.
+* Description
+A minimal project to run a lightweight remote desktop environment (i3 + VNC) inside a Docker container. Designed as a tiny, reproducible reference for personal use or as a starter template.
 
-* Objetivos
-- Ser una configuración mínima y fácil de usar.
-- Mantener todo reproducible mediante Docker/Docker Compose.
-- Integrarse bien con Emacs (org-mode, Doom Emacs config incluida).
+* Goals
+- Provide a minimal, easy-to-use configuration.
+- Keep everything reproducible using Docker / Docker Compose.
+- Play well with Emacs (org-mode and Doom Emacs configuration included).
 
-* Requisitos
-- Docker y docker-compose (o Podman + podman-compose)
-- GNU Make (opcional)
-- Babashka/emacs si quieres integrar configuraciones locales
+* Requirements
+- Docker and docker-compose (or Podman + podman-compose)
+- GNU Make (optional)
+- Emacs/Doom Emacs if you plan to use the included editor configuration
 
-* Cómo empezar
-1. Construir y levantar con Docker Compose:
+* Getting started
+1. Build and start the project with Docker Compose:
    #+begin_src sh
    docker-compose up -d --build
    #+end_src
 
-2. Conectar por VNC: localhost:5901 (por defecto)
+2. Connect via VNC at: localhost:5901 (default)
 
-3. Variables útiles (puedes exportarlas antes de lanzar):
-   - BASE_URL: (si aplicara) URL base para servicios
-   - INTERVAL: intervalo de monitoreo
-   - ENDPOINTS_FILE, LOG_FILE: paths para monitor
+3. Useful environment variables (export before running if needed):
+   - BASE_URL: base URL for services (if applicable)
+   - INTERVAL: monitoring interval in seconds
+   - ENDPOINTS_FILE, LOG_FILE: paths used by the monitor
 
-* Estructura del repositorio
-- Dockerfile :: imagen base y scripts
-- docker-compose.yml :: servicio i3wm
-- scripts/ :: scripts de inicio e instalación
-- config/ :: configuraciones de i3, emacs, fish, etc.
+* Repository structure
+- Dockerfile :: base image and script installation
+- docker-compose.yml :: service definition for i3wm
+- scripts/ :: startup and installation scripts
+- config/ :: i3, emacs, fish and other configs
 
-* Trabajo recomendado (próximos pasos)
-- Añadir CI para build y smoke tests (ya incluido en .github/workflows)
-- Documentar variables de entorno en .env.example
-- Revisar seguridad del VNC antes de exponer en producción
+* Recommended next steps
+- Add CI for build and smoke tests (there is a basic workflow in .github/workflows)
+- Add a .env.example documenting configuration variables
+- Review VNC security before exposing the service in production
 
-* Cómo contribuir
-Lee CONTRIBUTING.md para el flujo de trabajo con ramas y PRs.
+* How to contribute
+Please read CONTRIBUTING.md for branch workflow and PR guidelines.
 
-* Licencia
-MIT (ver LICENSE)
+* License
+MIT (see LICENSE)
 
-* Contacto
-Repositorio mantenido por el autor. Abrir issues o PRs en GitHub para sugerencias.
+* Contact
+Maintained by the author. Open issues or PRs on GitHub for suggestions.
