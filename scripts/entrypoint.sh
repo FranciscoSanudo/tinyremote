@@ -1,68 +1,78 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+set -euo pipefail
 
-# scripts/entrypoint.sh
-#!/bin/bash
+# Simple entrypoint for the container: install packages (if needed), start Xvfb, VNC and i3
+# This script aims to be idempotent and non-interactive.
 
-install_package() {
-    /usr/local/bin/install_packages.sh
+install_packages() {
+    # If you want to run package installation at container build time, prefer doing it in the Dockerfile.
+    if [ -x "/usr/local/bin/install_packages.sh" ]; then
+        /usr/local/bin/install_packages.sh || true
+    fi
 }
 
-
-# Function to start Xvfb
 start_xvfb() {
-    echo "Starting Xvfb..."
-    Xvfb $DISPLAY -screen 0 ${SCREEN_RESOLUTION}x${SCREEN_DEPTH} &
+    echo "Starting Xvfb on ${DISPLAY:-:1}..."
+    Xvfb ${DISPLAY:-:1} -screen 0 ${SCREEN_RESOLUTION:-1920x1080}x${SCREEN_DEPTH:-24} &
     sleep 2
-    DISPLAY=$DISPLAY xset r on
-    DISPLAY=$DISPLAY xset r rate 300 50
+    # enable key autorepeat
+    DISPLAY=${DISPLAY:-:1} xset r on || true
+    DISPLAY=${DISPLAY:-:1} xset r rate 300 50 || true
 }
 
-# Function to start VNC server
 start_vnc() {
-    echo "Starting VNC server..."
-    x11vnc -display $DISPLAY -rfbport $VNC_PORT -nopw -forever &
+    echo "Starting x11vnc on port ${VNC_PORT:-5901}..."
+    # If VNC_PASSWORD is set, use it; otherwise run without password but bind to 127.0.0.1 by default.
+    if [ -n "${VNC_PASSWORD:-}" ]; then
+        mkdir -p /root/.vnc
+        echo "${VNC_PASSWORD}" | vncpasswd -f > /root/.vnc/passwd
+        chmod 600 /root/.vnc/passwd
+        x11vnc -display ${DISPLAY:-:1} -rfbport ${VNC_PORT:-5901} -forever -rfbauth /root/.vnc/passwd &
+    else
+        # bind to 127.0.0.1 by default to reduce exposure
+        x11vnc -display ${DISPLAY:-:1} -rfbport ${VNC_PORT:-5901} -localhost -nopw -forever &
+    fi
     sleep 2
 }
 
-# Function to start i3
 start_i3() {
     echo "Starting i3 window manager..."
+    # Run i3 in background; ensure XAUTHORITY and DISPLAY are set if needed
     i3 &
     sleep 2
 }
 
-# Function to check health
 check_health() {
-    if ! pgrep Xvfb > /dev/null; then
+    # Basic checks to ensure processes are running
+    if ! pgrep -f Xvfb > /dev/null; then
         echo "Xvfb is not running!"
-        exit 1
+        return 1
     fi
-    if ! pgrep x11vnc > /dev/null; then
-        echo "VNC server is not running!"
-        exit 1
+    if ! pgrep -f x11vnc > /dev/null; then
+        echo "x11vnc is not running!"
+        return 1
     fi
-    if ! pgrep i3 > /dev/null; then
+    if ! pgrep -f i3 > /dev/null; then
         echo "i3 is not running!"
-        exit 1
+        return 1
     fi
+    return 0
 }
 
-# Main function
 main() {
-    package_install
+    install_packages
     start_xvfb
     start_vnc
     start_i3
 
-    echo "Setup complete! VNC server is running on port $VNC_PORT"
-    echo "Connect using VNC viewer at localhost:$VNC_PORT"
+    echo "Setup complete! VNC server is running on port ${VNC_PORT:-5901}"
+    echo "Connect using VNC viewer at localhost:${VNC_PORT:-5901} (or bind address configured in docker-compose)"
 
     # Keep container running and check health every 30 seconds
     while true; do
-        check_health
-        sleep 30
+        check_health || echo "Health check failed at $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+        sleep ${HEALTH_INTERVAL:-30}
     done
 }
 
-# Run main function
 main

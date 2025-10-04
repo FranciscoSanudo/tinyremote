@@ -13,6 +13,14 @@ jobs:
       - name: Check out
         uses: actions/checkout@v4
 
+      - name: Install shellcheck
+        run: |
+          sudo apt-get update && sudo apt-get install -y shellcheck
+
+      - name: Run shellcheck on scripts
+        run: |
+          shellcheck -x scripts/*.sh || true
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -37,7 +45,7 @@ jobs:
       - name: Smoke check - processes
         run: |
           set -e
-          # Comprobamos que el contenedor esté activo
+          # Basic process check inside the container
           docker exec tinyremote_ci sh -c "pgrep -f Xvfb || true"
 
       - name: Cleanup
